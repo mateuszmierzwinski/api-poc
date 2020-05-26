@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 	"io"
 	"log"
 	"newPocApi/endpoints"
@@ -21,7 +22,7 @@ type ctrl struct {
 
 }
 
-func (m *ctrl) Bind(ctx *gin.Context) {
+func (m *ctrl) BindStream(ctx *gin.Context) {
 	ctx.Stream(func(w io.Writer) bool {
 		log.Println("Stream opened. Notification will be sent in 10 seconds")
 		time.Sleep(10 * time.Second)
@@ -31,6 +32,29 @@ func (m *ctrl) Bind(ctx *gin.Context) {
 	})
 
 	ctx.Done()
+}
+
+func (m *ctrl) Bind(ctx *gin.Context) {
+	m.BindSocket(ctx)
+}
+
+func (m *ctrl) BindSocket(ctx *gin.Context) {
+	conn, err := wsupgrader.Upgrade(ctx.Writer, ctx.Request, nil)
+	if err != nil {
+		fmt.Println("Failed to set websocket upgrade: %+v", err)
+		return
+	}
+
+	log.Println("WebSocket opened. Notification will be sent in 10 seconds")
+	time.Sleep(10 * time.Second)
+	data,_ := json.Marshal(m.getNotification(fmt.Sprintf("https://%s", ctx.Request.Host)))
+	conn.WriteMessage(websocket.TextMessage ,data)
+	log.Println("Notification sent. To get new one reconnect to new websocket (restart client app)")
+}
+
+var wsupgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
 }
 
 func (m *ctrl) getNotification(currentUrl string) *Update {
