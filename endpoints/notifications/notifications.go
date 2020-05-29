@@ -50,6 +50,9 @@ func (m *ctrl) BindSocket(ctx *gin.Context) {
 	data,_ := json.Marshal(m.getNotification(fmt.Sprintf("https://%s", ctx.Request.Host)))
 	conn.WriteMessage(websocket.TextMessage ,data)
 	log.Println("Notification sent. To get new one reconnect to new websocket (restart client app)")
+	log.Println("Next notification will be sent in 1 hour if this connection will be opened")
+	time.Sleep(1 * time.Hour)
+	conn.WriteMessage(websocket.TextMessage ,data)
 }
 
 var wsupgrader = websocket.Upgrader{

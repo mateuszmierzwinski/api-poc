@@ -44,7 +44,7 @@ func (m *ctrl) getUptates(currentUrl string) *UpdatesMDL {
 			{
 				Image: fmt.Sprintf("%s%s", currentUrl, "/static/images/unsplash1.jpg"),
 				Status: "green",
-				Title: "Talk about gestures #1",
+				Title: "Talk about grammar #1",
 				Link: "https://math-stg.aida.pearson.com/api/v1/assets/videos/467",
 			},{
 				Image: fmt.Sprintf("%s%s", currentUrl, "/static/images/unsplash2.jpg"),
@@ -54,7 +54,7 @@ func (m *ctrl) getUptates(currentUrl string) *UpdatesMDL {
 			}, {
 				Image: fmt.Sprintf("%s%s", currentUrl, "/static/images/unsplash1.jpg"),
 				Status: "red",
-				Title: "Talk about gestures #2",
+				Title: "Talk about grammar #2",
 				Link: "https://math-stg.aida.pearson.com/api/v1/assets/videos/467",
 			},{
 				Image: fmt.Sprintf("%s%s", currentUrl, "/static/images/unsplash2.jpg"),
